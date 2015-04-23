@@ -95,8 +95,8 @@ class MarkupLeafletMap extends WireData implements Module {
 	 * Include our MapMarker class, which serves as the value for fields of type FieldtypeMapMarker
 	 *
 	 */
-	public function init() {
-		require_once(dirname(__FILE__) . '/LeafletMapMarker.php');
+	public function init() {	
+		require_once(dirname(__FILE__) . '/LeafletMapMarker.php'); 
 	}
 
 	public function getOptions($fieldName) {
@@ -129,9 +129,9 @@ class MarkupLeafletMap extends WireData implements Module {
 			);
 	}
 
-	// public function getLeafletMapScript() {
-	// 	return "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>";
-	// }
+	public function getLeafletMapScript() {
+		return "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>";
+	}
 
 	public function render($pageArray, $fieldName, array $options = array()) {
 
@@ -174,7 +174,7 @@ class MarkupLeafletMap extends WireData implements Module {
 		$id = $options['id'];
 		$out = '';
 
-		if($n === 1) $this->config->scripts->add($this->config->urls->MarkupLeafletMap . 'MarkupLeafletMap.js');
+		if($n === 1) $out .= "<script type='text/javascript' src='{$this->config->urls->MarkupLeafletMap}MarkupLeafletMap.js'></script>";
 
 		$out .= "<div id='$id' class='$options[class]'$style></div>";
 
@@ -193,7 +193,7 @@ class MarkupLeafletMap extends WireData implements Module {
 			$out .= "$id.addMarker($marker->lat, $marker->lng, '$url', '$title', ''); ";
 		}
 
-		if(count($pageArray) > 1 && $options['fitToMarkers']) $out .= "$id.fitToMarkers(); $id.adjustZoom($zoom); ";
+		if(count($pageArray) > 1 && $options['fitToMarkers']) $out .= "$id.fitToMarkers(); ";
 		
 
 		$out .= "</script>";
