@@ -64,6 +64,7 @@ class InputfieldLeafletMapMarker extends Inputfield {
 		$this->config->scripts->add(($this->config->https ? 'https' : 'http') . '://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js'); 
 		$this->config->scripts->add($this->config->urls->$class . 'Control.Geocoder.js'); 
 
+		$this->set('defaultProvider', '');
 
 		return parent::init();
 	}
@@ -157,6 +158,7 @@ _OUT;
 			"data-lat='$marker->lat' " . 
 			"data-lng='$marker->lng' " . 
 			"data-zoom='$marker->zoom' " . 
+			// "data-provider='$marker->provider' " . 
 			"data-type='$mapType'>" . 
 			"</div>";
 
@@ -201,6 +203,9 @@ _OUT;
 		$status = $input["_{$name}_status"]; 
 		if(is_null($status)) $marker->set('status', LeafletMapMarker::statusNoGeocode); // disable geocode
 			else $marker->set('status', (int) $status);
+
+		// $provider = $input["_{$name}_provider"];
+		// $marker->set('provider', $provider);		
 
 		// if the address changed, then redo the geocoding.
 		// while we do this in the Fieldtype, we also do it here in case this Inputfield is used on it's own.
@@ -282,6 +287,16 @@ _OUT;
 		$field->description = $this->_('Enter a value between 1 and 18.');  // Zoom level description
 		$field->attr('value', $this->defaultZoom); 
 		$field->attr('type', 'number'); 
+		$inputfields->add($field); 
+
+		$field = $this->modules->get('InputfieldSelect'); 	
+		$field->attr('name', 'defaultProvider'); 
+		$field->label = $this->_('Default Map Tile Provider'); 
+		$field->description = $this->_('Select the provider name, standard is \'OpenStreetMap.Mapnik\'');  
+		$field->notes = $this->_('You can see the tiles for different providers at [http://leaflet-extras.github.io/leaflet-providers/preview/](http://leaflet-extras.github.io/leaflet-providers/preview/)');
+		$selectoptions = ['OpenStreetMap.Mapnik' => 'OpenStreetMap.Mapnik', 'MapQuestOpen.OSM' => 'MapQuestOpen.OSM', 'OpenStreetMap.BlackAndWhite' => 'OpenStreetMap.BlackAndWhite', 'OpenStreetMap.DE' => 'OpenStreetMap.DE'];
+		$field->addOptions($selectoptions);
+		$field->attr('value', $this->defaultProvider);
 		$inputfields->add($field); 
 
 		$field = $this->modules->get('InputfieldMarkup'); 

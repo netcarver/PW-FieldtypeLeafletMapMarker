@@ -102,6 +102,7 @@ class FieldtypeLeafletMapMarker extends Fieldtype {
 		$marker->lng = $value['lng'];
 		$marker->status = $value['status'];
 		$marker->zoom = $value['zoom']; 
+		// $marker->provider = $value['provider']; 
 		$marker->setTrackChanges(true); 
 
 		return $marker; 
@@ -131,7 +132,8 @@ class FieldtypeLeafletMapMarker extends Fieldtype {
 			'lat' => strlen($marker->lat) ? $marker->lat : 0, 
 			'lng' => strlen($marker->lng) ? $marker->lng : 0, 
 			'status' => $marker->status,
-			'zoom' => $marker->zoom
+			'zoom' => $marker->zoom/*,
+			'provider' => $marker->provider*/
 			);
 
 		return $sleepValue; 
@@ -152,6 +154,7 @@ class FieldtypeLeafletMapMarker extends Fieldtype {
 		$schema['lng'] = "FLOAT(10,6) NOT NULL DEFAULT 0";	// longitude
 		$schema['status'] = "TINYINT NOT NULL DEFAULT 0";	// geocode status
 		$schema['zoom'] = "TINYINT NOT NULL DEFAULT 0";		// zoom level (schema v1)
+		// $schema['provider'] = "VARCHAR(255) NOT NULL DEFAULT ''"; 	
 
 		$schema['keys']['latlng'] = "KEY latlng (lat, lng)";	// keep an index of lat/lng 
 		$schema['keys']['data'] = 'FULLTEXT KEY `data` (`data`)';

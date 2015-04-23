@@ -95,7 +95,17 @@ class MarkupLeafletMap extends WireData implements Module {
 	 * Include our MapMarker class, which serves as the value for fields of type FieldtypeMapMarker
 	 *
 	 */
-	public function init() {	
+	public function init() {
+
+		$class = $this->classname();
+
+		$this->config->styles->add('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css');
+		$this->config->styles->add($this->config->urls->$class . "css/MarkerCluster.css");
+		$this->config->styles->add($this->config->urls->$class . "css/MarkerCluster.Default.css");
+		$this->config->scripts->add('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js');
+		$this->config->scripts->add($this->config->urls->$class . 'js/leaflet.markercluster.js');
+		$this->config->scripts->add($this->config->urls->$class . 'js/leaflet-providers.js');
+
 		require_once(dirname(__FILE__) . '/LeafletMapMarker.php'); 
 	}
 
@@ -121,6 +131,7 @@ class MarkupLeafletMap extends WireData implements Module {
 			'class' => "MarkupLeafletMap", 
 			'lat' => $field->defaultLat,
 			'lng' => $field->defaultLng,
+			'provider' => $field->defaultProvider,
 			'icon' => '', // url to icon (blank=use default)
 			'iconHover' => '', // url to icon when hovered (default=none)
 			'shadow' => '', // url to icon shadow (blank=use default)
@@ -130,7 +141,7 @@ class MarkupLeafletMap extends WireData implements Module {
 	}
 
 	public function getLeafletMapScript() {
-		return "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>";
+		// return "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>";
 	}
 
 	public function render($pageArray, $fieldName, array $options = array()) {
@@ -138,7 +149,8 @@ class MarkupLeafletMap extends WireData implements Module {
 		static $n = 0; 
 		$n++;
 
-		$defaultOptions = $this->getOptions($fieldName); 
+		$defaultOptions = $this->getOptions($fieldName);
+		// var_dump($defaultOptions);
 		$options = array_merge($defaultOptions, $options); 
 		
 		if($pageArray instanceof Page) {
@@ -162,6 +174,7 @@ class MarkupLeafletMap extends WireData implements Module {
 		$lng = $options['lng'];
 		$zoom = $options['zoom'] > 0 ? (int) $options['zoom'] : $defaultOptions['zoom'];
 		//$type = in_array($options['type'], array('ROADMAP', 'SATELLITE', 'HYBRID')) ? $options['type'] : 'HYBRID';
+		$provider = $options['provider'];
 
 		if($options['useMarkerSettings'] && (count($pageArray) == 1 || !$lat)) {
 			// single marker overrides lat, lng and zoom settings
@@ -182,7 +195,7 @@ class MarkupLeafletMap extends WireData implements Module {
 			"var $id = new MarkupLeafletMap(); " . 
 			"$id.setOption('zoom', $zoom); " . 
 			$options['init'] . 
-			"$id.init('$id', $lat, $lng); "; 
+			"$id.init('$id', $lat, $lng, '$provider'); "; 
 
 		foreach($pageArray as $page) {
 			$marker = $page->get($fieldName); 
