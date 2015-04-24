@@ -174,7 +174,7 @@ class MarkupLeafletMap extends WireData implements Module {
 		$lng = $options['lng'];
 		$zoom = $options['zoom'] > 0 ? (int) $options['zoom'] : $defaultOptions['zoom'];
 		//$type = in_array($options['type'], array('ROADMAP', 'SATELLITE', 'HYBRID')) ? $options['type'] : 'HYBRID';
-		$provider = $options['provider'];
+		$provider = ($options['provider'] == "") ? 'OpenStreetMap.Mapnik' : $options['provider'];
 
 		if($options['useMarkerSettings'] && (count($pageArray) == 1 || !$lat)) {
 			// single marker overrides lat, lng and zoom settings
