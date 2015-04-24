@@ -294,7 +294,6 @@ _OUT;
 		$field->label = $this->_('Default Map Tile Provider'); 
 		$field->description = $this->_('Select the provider name, standard is \'OpenStreetMap.Mapnik\'');  
 		$field->notes = $this->_('You can see the tiles for different providers at [http://leaflet-extras.github.io/leaflet-providers/preview/](http://leaflet-extras.github.io/leaflet-providers/preview/)');
-		$providers = file_get_contents(dirname(__FILE__) . '/inc/providers.inc');
 		$field->addOptionsString(file_get_contents(dirname(__FILE__) . '/inc/providers.inc'));
 		$field->attr('value', $this->defaultProvider);
 		$inputfields->add($field); 
