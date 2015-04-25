@@ -50,6 +50,9 @@
  * // zoom level
  * 'zoom' => 12 (or $field->defaultZoom)
  *  
+ * // set to true to automatically adjust maximum zoom level to default zoom 
+ * 'maxZoom' => true 
+ *  
  * // map ID attribute
  * 'id' => "mgmap" 
  * 
@@ -101,11 +104,11 @@ class MarkupLeafletMap extends WireData implements Module {
 		$assetPath = $this->config->urls->$class;
 
 		$this->config->styles->add('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css');
-		$this->config->styles->add($assetPath . "css/MarkerCluster.css");
-		$this->config->styles->add($assetPath . "css/MarkerCluster.Default.css");
+		$this->config->styles->add($assetPath . "assets/leaflet-markercluster/MarkerCluster.css");
+		$this->config->styles->add($assetPath . "assets/leaflet-markercluster/MarkerCluster.Default.css");
 		$this->config->scripts->add('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js');
-		$this->config->scripts->add($assetPath . 'js/leaflet.markercluster.js');
-		$this->config->scripts->add($assetPath . 'js/leaflet-providers.js');
+		$this->config->scripts->add($assetPath . 'assets/leaflet-markercluster/leaflet.markercluster.js');
+		$this->config->scripts->add($assetPath . 'assets/leaflet-providers/leaflet-providers.js');
 		$this->config->scripts->add($assetPath . 'MarkupLeafletMap.js');
 
 		require_once(dirname(__FILE__) . '/LeafletMapMarker.php');
