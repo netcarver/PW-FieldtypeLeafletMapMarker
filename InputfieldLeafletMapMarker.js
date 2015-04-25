@@ -12,7 +12,7 @@ var InputfieldLeafletMapMarker = {
 	},	
 
 
-	init: function(mapId, lat, lng, zoom, mapType) {
+	init: function(mapId, lat, lng, zoom, mapType, provider) {
 
 		var options = InputfieldLeafletMapMarker.options; 
 
@@ -23,9 +23,10 @@ var InputfieldLeafletMapMarker = {
 		
 		var map = L.map(document.getElementById(mapId)). setView([lat, lng], options.zoom); 	
 
-		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-		    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-		}).addTo(map);
+		// L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+		//     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+		// }).addTo(map);
+		L.tileLayer.provider(provider).addTo(map);
 
 		var coder = L.Control.Geocoder.nominatim(),
 			geocoder = L.Control.geocoder({
@@ -194,6 +195,6 @@ var InputfieldLeafletMapMarker = {
 $(document).ready(function() {
 	$(".InputfieldLeafletMapMarkerMap").each(function() {
 		var $t = $(this);
-		InputfieldLeafletMapMarker.init($t.attr('id'), $t.attr('data-lat'), $t.attr('data-lng'), $t.attr('data-zoom'), $t.attr('data-type')); 
+		InputfieldLeafletMapMarker.init($t.attr('id'), $t.attr('data-lat'), $t.attr('data-lng'), $t.attr('data-zoom'), $t.attr('data-type'), $t.attr('data-provider')); 
 	}); 
 }); 

@@ -56,15 +56,16 @@ class InputfieldLeafletMapMarker extends Inputfield {
 	public function init() {
 
 		$class = $this->className(); 
-
+		$assetPath = $this->config->urls->$class;
 		
 		$this->config->styles->add(($this->config->https ? 'https' : 'http') . '://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css'); 
 		$this->config->styles->add($this->config->urls->$class . 'Control.Geocoder.css'); 
 		//$this->config->styles->add($this->config->urls->$class . 'InputfieldLeafletMapMarker.css'); 
 		$this->config->scripts->add(($this->config->https ? 'https' : 'http') . '://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js'); 
+		$this->config->scripts->add($assetPath . 'js/leaflet-providers.js');
 		$this->config->scripts->add($this->config->urls->$class . 'Control.Geocoder.js'); 
 
-		$this->set('defaultProvider', '');
+		$this->set('defaultProvider', 'OpenStreetMap.Mapnik');
 
 		return parent::init();
 	}
@@ -104,7 +105,8 @@ class InputfieldLeafletMapMarker extends Inputfield {
 		$address = htmlentities($marker->address, ENT_QUOTES, "UTF-8"); 
 		$toggleChecked = $marker->status != LeafletMapMarker::statusNoGeocode ? " checked='checked'" : '';
 		$status = $marker->status == LeafletMapMarker::statusNoGeocode ? 0 : $marker->status; 
-		$mapType = $this->defaultType; 
+		$mapType = $this->defaultType;
+		$provider = $this->defaultProvider; 
 		$height = $this->height ? (int) $this->height : 300; 
 
 		$labels = array(
@@ -158,8 +160,8 @@ _OUT;
 			"data-lat='$marker->lat' " . 
 			"data-lng='$marker->lng' " . 
 			"data-zoom='$marker->zoom' " . 
-			// "data-provider='$marker->provider' " . 
-			"data-type='$mapType'>" . 
+			"data-type='$mapType'" . 
+			"data-provider='$provider'>" . 
 			"</div>";
 
 		//$this->notes = $marker->statusString; 

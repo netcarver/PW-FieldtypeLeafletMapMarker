@@ -135,6 +135,7 @@ class MarkupLeafletMap extends WireData implements Module {
 			'lat' => $field->defaultLat,
 			'lng' => $field->defaultLng,
 			'provider' => $field->defaultProvider,
+			'maxZoom' => false,
 			'icon' => '', // url to icon (blank=use default)
 			'iconHover' => '', // url to icon when hovered (default=none)
 			'shadow' => '', // url to icon shadow (blank=use default)
@@ -210,6 +211,8 @@ class MarkupLeafletMap extends WireData implements Module {
 		}
 
 		if(count($pageArray) > 1 && $options['fitToMarkers']) $inlineScript .= "$id.fitToMarkers(); ";
+
+		if(count($pageArray) > 1 && $options['maxZoom']) $inlineScript .= "$id.setMaxZoom(); ";
 		
 
 		$inlineScript .= "});</script>";

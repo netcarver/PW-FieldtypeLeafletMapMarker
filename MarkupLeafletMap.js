@@ -115,7 +115,15 @@ function MarkupLeafletMap() {
 		}
 
 		map.fitBounds(mg);
+		// map.fitBounds(mg, {maxZoom: this.options['zoom']});
 
+	}
+
+	this.setMaxZoom = function() {
+
+		var map = this.map;
+
+		map.setZoom(this.options['zoom']);
 
 	}
 
