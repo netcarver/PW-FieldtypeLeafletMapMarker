@@ -78,7 +78,6 @@ function MarkupLeafletMap() {
 			title: title
 		}; 
 	
-		
 		marker = L.marker(latLng, markerOptions);
 
 			
@@ -123,6 +122,5 @@ function MarkupLeafletMap() {
 
 
 
-	
 }
 

@@ -87,7 +87,7 @@ class MarkupLeafletMap extends WireData implements Module {
 			'title' => 'LeafletMap Markup',
 			'version' => 101,
 			'summary' => 'Renders Leaflet Maps for the LealetMapMarker Fieldtype',
-			'requires' => 'FieldtypeLeafletMapMarker',
+			'requires' => array('FieldtypeLeafletMapMarker', 'MarkupAddInlineScript')
 			);
 	}
 
@@ -98,15 +98,18 @@ class MarkupLeafletMap extends WireData implements Module {
 	public function init() {
 
 		$class = $this->classname();
+		$assetPath = $this->config->urls->$class;
 
 		$this->config->styles->add('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css');
-		$this->config->styles->add($this->config->urls->$class . "css/MarkerCluster.css");
-		$this->config->styles->add($this->config->urls->$class . "css/MarkerCluster.Default.css");
+		$this->config->styles->add($assetPath . "css/MarkerCluster.css");
+		$this->config->styles->add($assetPath . "css/MarkerCluster.Default.css");
 		$this->config->scripts->add('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js');
-		$this->config->scripts->add($this->config->urls->$class . 'js/leaflet.markercluster.js');
-		$this->config->scripts->add($this->config->urls->$class . 'js/leaflet-providers.js');
+		$this->config->scripts->add($assetPath . 'js/leaflet.markercluster.js');
+		$this->config->scripts->add($assetPath . 'js/leaflet-providers.js');
+		$this->config->scripts->add($assetPath . 'MarkupLeafletMap.js');
 
-		require_once(dirname(__FILE__) . '/LeafletMapMarker.php'); 
+		require_once(dirname(__FILE__) . '/LeafletMapMarker.php');
+
 	}
 
 	public function getOptions($fieldName) {
@@ -150,7 +153,7 @@ class MarkupLeafletMap extends WireData implements Module {
 		$n++;
 
 		$defaultOptions = $this->getOptions($fieldName);
-		// var_dump($defaultOptions);
+
 		$options = array_merge($defaultOptions, $options); 
 		
 		if($pageArray instanceof Page) {
@@ -187,11 +190,11 @@ class MarkupLeafletMap extends WireData implements Module {
 		$id = $options['id'];
 		$out = '';
 
-		if($n === 1) $out .= "<script type='text/javascript' src='{$this->config->urls->MarkupLeafletMap}MarkupLeafletMap.js'></script>";
+		// if($n === 1) $out .= "<script type='text/javascript' src='{$this->config->urls->MarkupLeafletMap}MarkupLeafletMap.js'></script>";
 
 		$out .= "<div id='$id' class='$options[class]'$style></div>";
 
-		$out .= "<script type='text/javascript'>" . 
+		$inlineScript = "<script type='text/javascript'>$(function() {" . 
 			"var $id = new MarkupLeafletMap(); " . 
 			"$id.setOption('zoom', $zoom); " . 
 			$options['init'] . 
@@ -203,14 +206,17 @@ class MarkupLeafletMap extends WireData implements Module {
 			if(!$marker->lat) continue; 
 			$url = $options['markerLinkField'] ? $page->get($options['markerLinkField']) : '';
 			$title = $options['markerTitleField'] ? $page->get($options['markerTitleField']) : ''; 
-			$out .= "$id.addMarker($marker->lat, $marker->lng, '$url', '$title', ''); ";
+			$inlineScript .= "$id.addMarker($marker->lat, $marker->lng, '$url', '$title', ''); ";
 		}
 
-		if(count($pageArray) > 1 && $options['fitToMarkers']) $out .= "$id.fitToMarkers(); ";
+		if(count($pageArray) > 1 && $options['fitToMarkers']) $inlineScript .= "$id.fitToMarkers(); ";
 		
 
-		$out .= "</script>";
+		$inlineScript .= "});</script>";
+		
+		$this->page->inlineScript = $inlineScript;
 
 		return $out; 
 	}
+
 }
