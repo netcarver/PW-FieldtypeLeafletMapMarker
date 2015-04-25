@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * ProcessWire 'Hello world' demonstration module
+ *
+ * Demonstrates the Module interface and how to add hooks.
+ * 
+ * See README file for further links regarding module development.
+ * 
+ * ProcessWire 2.x 
+ * Copyright (C) 2014 by Ryan Cramer 
+ * Licensed under GNU/GPL v2, see LICENSE.TXT
+ * 
+ * http://processwire.com
+ *
+ */
+
+class MarkupAddInlineScript extends WireData implements Module {
+
+	/**
+	 * getModuleInfo is a module required by all modules to tell ProcessWire about them
+	 *
+	 * @return array
+	 *
+	 */
+	public static function getModuleInfo() {
+
+		return array(
+
+			'title' => 'MarkupAddInlineScript', 
+			'version' => 1, 
+			'summary' => 'adds inline script before </body>',
+			'singular' => true, 
+			'autoload' => true, 
+			);
+	}
+
+	/**
+	 * Initialize the module
+	 *
+	 * ProcessWire calls this when the module is loaded. For 'autoload' modules, this will be called
+	 * when ProcessWire's API is ready. As a result, this is a good place to attach hooks. 
+	 *
+	 */
+	public function init() {
+
+		$this->addHookAfter('Page::render', $this, 'addInlineScript'); 
+
+	}
+
+	public function addInlineScript($event) {
+
+		$page = $event->object;
+
+		if ($page->template->name !== "admin" && $page->inlineScript) {
+
+			$event->return = str_replace("</body>", $page->inlineScript . "</body>", $event->return);
+
+		}
+
+	}
+	
+}
