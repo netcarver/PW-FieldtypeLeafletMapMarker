@@ -16,7 +16,8 @@ class MarkupAddInlineScript extends WireData implements Module {
 			'version' => 1, 
 			'summary' => 'adds inline script before </body>',
 			'singular' => true, 
-			'autoload' => true, 
+			'autoload' => true,
+			'requires' => 'MarkupLeafletMap' 
 			);
 	}
 
