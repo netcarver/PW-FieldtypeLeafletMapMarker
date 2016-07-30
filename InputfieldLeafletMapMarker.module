@@ -151,7 +151,7 @@ class InputfieldLeafletMapMarker extends Inputfield {
             </label>
             </p>
 
-            _OUT;
+_OUT;
 
         $out .= "<div class='InputfieldLeafletMapMarkerMap' " .
             "id='_{$id}_map' " .
