@@ -41,7 +41,6 @@ function MarkupLeafletMap() {
         center: null,
     };
 
-
     this._currentURL = '';
     this.init = function(mapID, lat, lng, provider) {
         if(lat != 0) this.map = L.map(mapID, {center: [lat, lng], zoom: this.options.zoom} );
@@ -55,10 +54,11 @@ function MarkupLeafletMap() {
     var markers = new L.MarkerClusterGroup({polygonOptions: {color: 'teal', weight: 1, opacity: .39, lineJoin: 'round'}});
     var marker = '';
 
-    this.addMarker = function(lat, lng, url, title) {
+    this.addMarker = function(lat, lng, url, title, extra) {
         if(lat == 0.0) return;
 
         var latLng = L.latLng(lat, lng);
+
         var markerOptions = {
             linkURL: '',
             title: title
@@ -73,9 +73,13 @@ function MarkupLeafletMap() {
         if(url.length > 0) marker.linkURL = url;
 
         if(marker.linkURL.length > 0) {
-            marker.bindPopup("<b><a href='" + marker.linkURL + "'>" + title + "</a></b>");
+            if (extra.length > 0) {
+                extra = '<br />' + extra;
+            }
+            marker.bindPopup("<b><a href='" + marker.linkURL + "'>" + title + "</a></b>" + extra);
         }
     }
+
 
     this.fitToMarkers = function() {
         var map = this.map;
@@ -87,9 +91,9 @@ function MarkupLeafletMap() {
         map.fitBounds(mg);
     }
 
+
     this.setMaxZoom = function() {
         var map = this.map;
         map.setZoom(this.options['zoom']);
     }
-
 }

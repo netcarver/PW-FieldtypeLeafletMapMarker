@@ -142,6 +142,7 @@ class MarkupLeafletMap extends WireData implements Module {
             'shadow' => '', // url to icon shadow (blank=use default)
             'init' => '', // additional javascript code to insert in map initialization
             'n' => $n,
+            'popupFormatter' => '',
         );
     }
 
@@ -201,9 +202,13 @@ class MarkupLeafletMap extends WireData implements Module {
             $marker = $page->get($fieldName);
             if(!$marker instanceof LeafletMapMarker) continue;
             if(!$marker->lat) continue;
-            $url = $options['markerLinkField'] ? $page->get($options['markerLinkField']) : '';
+            $url   = $options['markerLinkField']  ? $page->get($options['markerLinkField'])  : '';
             $title = $options['markerTitleField'] ? $page->get($options['markerTitleField']) : '';
-            $inlineScript .= "$id.addMarker($marker->lat, $marker->lng, '$url', '$title', ''); ";
+            $popup = '';
+            if (isset($options['popupFormatter']) && is_callable($options['popupFormatter'])) {
+                $popup = call_user_func($options['popupFormatter'], $page);
+            }
+            $inlineScript .= "$id.addMarker($marker->lat, $marker->lng, '$url', '$title', '$popup');\n";
         }
 
         if(count($pageArray) > 1 && $options['fitToMarkers']) $inlineScript .= "$id.fitToMarkers(); ";
