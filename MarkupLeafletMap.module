@@ -4,226 +4,214 @@
  * ProcessWire Leaflet Map Markup
  * Port of Google Map Markup by Ryan Cramer
  * Renders maps for the FieldtypeMapMarker module
- * 
- * ProcessWire 2.x 
- * Copyright (C) 2013 by Ryan Cramer 
- * Copyright (C) 2015 by Mats Neander 
+ *
+ * ProcessWire 2.x
+ * Copyright (C) 2013 by Ryan Cramer
+ * Copyright (C) 2015 by Mats Neander
  * Licensed under GNU/GPL v2, see LICENSE.TXT
- * 
+ *
  * http://processwire.com
  *
  * USAGE:
  * ======
  *
  * Add this somewhere before your closing </head> tag:
- * 
+ *
  *     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
  *     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
- *  
+ *
  * In the location where you want to output your map, do the following in your template file:
- * 
- *    $map = $modules->get('MarkupLeafletMap'); 
+ *
+ *    $map = $modules->get('MarkupLeafletMap');
  *    echo $map->render($page, 'map'); // replace 'map' with the name of your LeafletFieldtypeMap field
  *
- * To render a map with multiple markers on it, specify a PageArray rather than a single $page: 
+ * To render a map with multiple markers on it, specify a PageArray rather than a single $page:
  *
- *    $items = $pages->find("template=something, map!='', sort=title"); 
- *    $map = $modules->get('MarkupLeafletMap'); 
- *    echo $map->render($items, 'map'); 
+ *    $items = $pages->find("template=something, map!='', sort=title");
+ *    $map = $modules->get('MarkupLeafletMap');
+ *    echo $map->render($items, 'map');
  *
  * To specify options, provide a 3rd argument with an options array:
  *
- *    $map = $modules->get('MarkupLeafletMap'); 
- *    echo $map->render($items, 'map', array('height' => '500px')); 
+ *    $map = $modules->get('MarkupLeafletMap');
+ *    echo $map->render($items, 'map', array('height' => '500px'));
  *
- * 
+ *
  * OPTIONS
  * =======
- * Here is a list of all possible options (with defaults shown):  
- * 
- * // default width of the map 
- * 'width' => '100%' 
- * 
+ * Here is a list of all possible options (with defaults shown):
+ *
+ * // default width of the map
+ * 'width' => '100%'
+ *
  * // default height of the map
- * 'height' => '300px' 
- * 
+ * 'height' => '300px'
+ *
  * // zoom level
  * 'zoom' => 12 (or $field->defaultZoom)
- *  
- * // set to true to automatically adjust maximum zoom level to default zoom 
- * 'maxZoom' => true 
- *  
+ *
+ * // set to true to automatically adjust maximum zoom level to default zoom
+ * 'maxZoom' => true
+ *
  * // map ID attribute
- * 'id' => "mgmap" 
- * 
+ * 'id' => "mgmap"
+ *
  * // map class attribute
- * 'class' => "MarkupGoogleMap" 
- * 
+ * 'class' => "MarkupGoogleMap"
+ *
  * // center latitude
- * 'lat' => $field->defaultLat 
- * 
+ * 'lat' => $field->defaultLat
+ *
  * // center longitude
- * 'lng' => $field->defaultLng 
- * 
+ * 'lng' => $field->defaultLng
+ *
  * // set to false only if you will style the map <div> yourself
- * 'useStyles' => true 
- *  
+ * 'useStyles' => true
+ *
  * // field to use for the marker link, or blank to not link
- * 'markerLinkField' => 'url' 
+ * 'markerLinkField' => 'url'
  *
  * // field to use for the marker title
- * 'markerTitleField' => 'title' 
- * 
- * // map will automatically adjust to fit to the given markers (when multiple markers)
- * 'fitToMarkers' => true 
+ * 'markerTitleField' => 'title'
  *
- * 
+ * // map will automatically adjust to fit to the given markers (when multiple markers)
+ * 'fitToMarkers' => true
+ *
+ *
  * // Any extra javascript initialization code you want to occur before the map itself is drawn
- * 'init' => '', 
+ * 'init' => '',
  *
  */
 
 class MarkupLeafletMap extends WireData implements Module {
 
-	public static function getModuleInfo() {
-		return array(
-			'title' => 'LeafletMap Markup',
-			'version' => 101,
-			'summary' => 'Renders Leaflet Maps for the LealetMapMarker Fieldtype',
-			'requires' => 'FieldtypeLeafletMapMarker',
-			'installs' => 'MarkupAddInlineScript'
-			);
-	}
+    public static function getModuleInfo() {
+        return array(
+            'title' => 'LeafletMap Markup',
+            'version' => 101,
+            'summary' => 'Renders Leaflet Maps for the LealetMapMarker Fieldtype',
+            'requires' => 'FieldtypeLeafletMapMarker',
+            'installs' => 'MarkupAddInlineScript'
+        );
+    }
 
-	/**
-	 * Include our MapMarker class, which serves as the value for fields of type FieldtypeMapMarker
-	 *
-	 */
-	public function init() {
+    /**
+     * Include our MapMarker class, which serves as the value for fields of type FieldtypeMapMarker
+     *
+     */
+    public function init() {
+        $class = $this->classname();
+        $assetPath = $this->config->urls->$class;
 
-		$class = $this->classname();
-		$assetPath = $this->config->urls->$class;
+        $this->config->styles->add('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css');
+        $this->config->styles->add($assetPath . "assets/leaflet-markercluster/MarkerCluster.css");
+        $this->config->styles->add($assetPath . "assets/leaflet-markercluster/MarkerCluster.Default.css");
+        $this->config->scripts->add('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js');
+        $this->config->scripts->add($assetPath . 'assets/leaflet-markercluster/leaflet.markercluster.js');
+        $this->config->scripts->add($assetPath . 'assets/leaflet-providers/leaflet-providers.js');
+        $this->config->scripts->add($assetPath . 'MarkupLeafletMap.js');
 
-		$this->config->styles->add('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css');
-		$this->config->styles->add($assetPath . "assets/leaflet-markercluster/MarkerCluster.css");
-		$this->config->styles->add($assetPath . "assets/leaflet-markercluster/MarkerCluster.Default.css");
-		$this->config->scripts->add('http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js');
-		$this->config->scripts->add($assetPath . 'assets/leaflet-markercluster/leaflet.markercluster.js');
-		$this->config->scripts->add($assetPath . 'assets/leaflet-providers/leaflet-providers.js');
-		$this->config->scripts->add($assetPath . 'MarkupLeafletMap.js');
+        require_once(dirname(__FILE__) . '/LeafletMapMarker.php');
+    }
 
-		require_once(dirname(__FILE__) . '/LeafletMapMarker.php');
+    public function getOptions($fieldName) {
+        static $n = 0;
+        $field = $this->fields->get($fieldName);
+        if(!$field) throw new WireException("Unknown field: $fieldName");
 
-	}
+        return array(
+            'useStyles' => true,
+            'fitToMarkers' => true,
+            'useMarkerSettings' => true,
+            'useHoverBox' => false,
+            'hoverBoxMarkup' => "<div data-top='-10' data-left='15' style='background: #000; color: #fff; padding: 0.25em 0.5em; border-radius: 3px;'></div>",
+            'markerLinkField' => 'url',
+            'markerTitleField' => 'title',
+            'width' => '100%',
+            'height' => $field->height,
+            'zoom' => $field->defaultZoom ? (int) $field->defaultZoom : 12,
+            'type' => $field->defaultType ? $field->defaultType : 'HYBRID',
+            'id' => "mleafletmap" . (++$n),
+            'class' => "MarkupLeafletMap",
+            'lat' => $field->defaultLat,
+            'lng' => $field->defaultLng,
+            'provider' => $field->defaultProvider,
+            'maxZoom' => false,
+            'icon' => '', // url to icon (blank=use default)
+            'iconHover' => '', // url to icon when hovered (default=none)
+            'shadow' => '', // url to icon shadow (blank=use default)
+            'init' => '', // additional javascript code to insert in map initialization
+            'n' => $n,
+        );
+    }
 
-	public function getOptions($fieldName) {
+    public function getLeafletMapScript() {
+        // return "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>";
+    }
 
-		static $n = 0; 
-		$field = $this->fields->get($fieldName); 
-		if(!$field) throw new WireException("Unknown field: $fieldName"); 
+    public function render($pageArray, $fieldName, array $options = array()) {
+        static $n = 0;
+        $n++;
 
-		return array(
-			'useStyles' => true, 
-			'fitToMarkers' => true, 
-			'useMarkerSettings' => true, 
-			'useHoverBox' => false, 
-			'hoverBoxMarkup' => "<div data-top='-10' data-left='15' style='background: #000; color: #fff; padding: 0.25em 0.5em; border-radius: 3px;'></div>", 
-			'markerLinkField' => 'url', 
-			'markerTitleField' => 'title', 
-			'width' => '100%', 
-			'height' => $field->height, 
-			'zoom' => $field->defaultZoom ? (int) $field->defaultZoom : 12, 
-			'type' => $field->defaultType ? $field->defaultType : 'HYBRID', 
-			'id' => "mleafletmap" . (++$n), 
-			'class' => "MarkupLeafletMap", 
-			'lat' => $field->defaultLat,
-			'lng' => $field->defaultLng,
-			'provider' => $field->defaultProvider,
-			'maxZoom' => false,
-			'icon' => '', // url to icon (blank=use default)
-			'iconHover' => '', // url to icon when hovered (default=none)
-			'shadow' => '', // url to icon shadow (blank=use default)
-			'init' => '', // additional javascript code to insert in map initialization
-			'n' => $n, 
-			);
-	}
+        $defaultOptions = $this->getOptions($fieldName);
+        $options = array_merge($defaultOptions, $options);
+        if($pageArray instanceof Page) {
+            $page = $pageArray;
+            $pageArray = new PageArray();
+            $pageArray->add($page);
+        }
 
-	public function getLeafletMapScript() {
-		// return "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>";
-	}
+        $height = $options['height'];
+        $width = $options['width'];
+        if(empty($height)) $height = 300;
+        if(ctype_digit("$height")) $height .= "px";
+        if(ctype_digit("$width")) $width .= "px";
 
-	public function render($pageArray, $fieldName, array $options = array()) {
+        $style = '';
+        if($options['useStyles'] && !empty($height) && !empty($width)) {
+            $style = " style='width: $width; height: $height;'";
+        }
 
-		static $n = 0; 
-		$n++;
+        $lat = $options['lat'];
+        $lng = $options['lng'];
+        $zoom = $options['zoom'] > 0 ? (int) $options['zoom'] : $defaultOptions['zoom'];
+        //$type = in_array($options['type'], array('ROADMAP', 'SATELLITE', 'HYBRID')) ? $options['type'] : 'HYBRID';
+        $provider = ($options['provider'] == "") ? 'OpenStreetMap.Mapnik' : $options['provider'];
 
-		$defaultOptions = $this->getOptions($fieldName);
+        if($options['useMarkerSettings'] && (count($pageArray) == 1 || !$lat)) {
+            // single marker overrides lat, lng and zoom settings
+            $marker = $pageArray->first()->get($fieldName);
+            $lat = $marker->lat;
+            $lng = $marker->lng;
+            if($marker->zoom > 0) $zoom = (int) $marker->zoom;
+        }
 
-		$options = array_merge($defaultOptions, $options); 
-		
-		if($pageArray instanceof Page) {
-			$page = $pageArray; 
-			$pageArray = new PageArray();
-			$pageArray->add($page); 
-		}
+        $id = $options['id'];
+        $out = '';
 
-		$height = $options['height']; 
-		$width = $options['width'];
-		if(empty($height)) $height = 300; 
-		if(ctype_digit("$height")) $height .= "px";
-		if(ctype_digit("$width")) $width .= "px";
+        $out .= "<div id='$id' class='$options[class]'$style></div>";
 
-		$style = '';	
-		if($options['useStyles'] && !empty($height) && !empty($width)) {
-			$style = " style='width: $width; height: $height;'"; 
-		}	
+        $inlineScript = "<script type='text/javascript'>$(function() {" .
+            "var $id = new MarkupLeafletMap(); " .
+            "$id.setOption('zoom', $zoom); " .
+            $options['init'] .
+            "$id.init('$id', $lat, $lng, '$provider'); ";
 
-		$lat = $options['lat'];
-		$lng = $options['lng'];
-		$zoom = $options['zoom'] > 0 ? (int) $options['zoom'] : $defaultOptions['zoom'];
-		//$type = in_array($options['type'], array('ROADMAP', 'SATELLITE', 'HYBRID')) ? $options['type'] : 'HYBRID';
-		$provider = ($options['provider'] == "") ? 'OpenStreetMap.Mapnik' : $options['provider'];
+        foreach($pageArray as $page) {
+            $marker = $page->get($fieldName);
+            if(!$marker instanceof LeafletMapMarker) continue;
+            if(!$marker->lat) continue;
+            $url = $options['markerLinkField'] ? $page->get($options['markerLinkField']) : '';
+            $title = $options['markerTitleField'] ? $page->get($options['markerTitleField']) : '';
+            $inlineScript .= "$id.addMarker($marker->lat, $marker->lng, '$url', '$title', ''); ";
+        }
 
-		if($options['useMarkerSettings'] && (count($pageArray) == 1 || !$lat)) {
-			// single marker overrides lat, lng and zoom settings
-			$marker = $pageArray->first()->get($fieldName); 
-			$lat = $marker->lat; 
-			$lng = $marker->lng; 
-			if($marker->zoom > 0) $zoom = (int) $marker->zoom;
-		}
+        if(count($pageArray) > 1 && $options['fitToMarkers']) $inlineScript .= "$id.fitToMarkers(); ";
+        if(count($pageArray) > 1 && $options['maxZoom']) $inlineScript .= "$id.setMaxZoom(); ";
 
-		$id = $options['id'];
-		$out = '';
+        $inlineScript .= "});</script>";
+        $this->page->inlineScript = $inlineScript;
 
-		// if($n === 1) $out .= "<script type='text/javascript' src='{$this->config->urls->MarkupLeafletMap}MarkupLeafletMap.js'></script>";
-
-		$out .= "<div id='$id' class='$options[class]'$style></div>";
-
-		$inlineScript = "<script type='text/javascript'>$(function() {" . 
-			"var $id = new MarkupLeafletMap(); " . 
-			"$id.setOption('zoom', $zoom); " . 
-			$options['init'] . 
-			"$id.init('$id', $lat, $lng, '$provider'); "; 
-
-		foreach($pageArray as $page) {
-			$marker = $page->get($fieldName); 
-			if(!$marker instanceof LeafletMapMarker) continue; 
-			if(!$marker->lat) continue; 
-			$url = $options['markerLinkField'] ? $page->get($options['markerLinkField']) : '';
-			$title = $options['markerTitleField'] ? $page->get($options['markerTitleField']) : ''; 
-			$inlineScript .= "$id.addMarker($marker->lat, $marker->lng, '$url', '$title', ''); ";
-		}
-
-		if(count($pageArray) > 1 && $options['fitToMarkers']) $inlineScript .= "$id.fitToMarkers(); ";
-
-		if(count($pageArray) > 1 && $options['maxZoom']) $inlineScript .= "$id.setMaxZoom(); ";
-		
-
-		$inlineScript .= "});</script>";
-		
-		$this->page->inlineScript = $inlineScript;
-
-		return $out; 
-	}
-
+        return $out;
+    }
 }
