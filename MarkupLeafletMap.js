@@ -81,6 +81,28 @@ function MarkupLeafletMap() {
     }
 
 
+    this.addMarkerIcon = function(icon, lat, lng, url, title, extra) {
+        if(lat == 0.0) return;
+
+        var latLng = L.latLng(lat, lng);
+
+        marker = L.marker(latLng, {icon: icon, linkURL: '', title: title});
+        markers.addLayer(marker);
+        this.map.addLayer(markers);
+        this.markers[this.numMarkers] = marker;
+        this.numMarkers++;
+
+        if(url.length > 0) marker.linkURL = url;
+
+        if(marker.linkURL.length > 0) {
+            if (extra.length > 0) {
+                extra = '<br />' + extra;
+            }
+            marker.bindPopup("<b><a href='" + marker.linkURL + "'>" + title + "</a></b>" + extra);
+        }
+    }
+
+
     this.fitToMarkers = function() {
         var map = this.map;
         var mg = [];
