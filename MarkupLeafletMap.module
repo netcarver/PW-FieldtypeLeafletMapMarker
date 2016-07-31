@@ -146,9 +146,28 @@ class MarkupLeafletMap extends WireData implements Module {
         );
     }
 
-    public function getLeafletMapScript() {
-        // return "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>";
+
+    /**
+     * Call this method when constucting the HTML header, to inject all the script and style files needed for Leaflet maps.
+     */
+    public function getLeafletMapHeaderLines() {
+        $url = $this->config->urls->siteModules. 'FieldtypeLeafletMapMarker/';
+        $lines = <<<LINES
+        <!-- Styles supporting the use of Leaflet.js -->
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+        <link rel="stylesheet" type="text/css" href="{$url}assets/leaflet-markercluster/MarkerCluster.css" />
+        <link rel="stylesheet" type="text/css" href="{$url}assets/leaflet-markercluster/MarkerCluster.Default.css" />
+
+        <!-- Scripts supporting the use of Leaflet.js -->
+        <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+        <script type="text/javascript" src="{$url}assets/leaflet-markercluster/leaflet.markercluster.js"></script>
+        <script type="text/javascript" src="{$url}assets/leaflet-providers/leaflet-providers.js"></script>
+        <script type="text/javascript" src="{$url}MarkupLeafletMap.js"></script>
+LINES;
+
+        return $lines;
     }
+
 
     public function render($pageArray, $fieldName, array $options = array()) {
         static $n = 0;
