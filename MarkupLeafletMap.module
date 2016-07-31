@@ -143,8 +143,12 @@ class MarkupLeafletMap extends WireData implements Module {
             'init' => '', // additional javascript code to insert in map initialization
             'n' => $n,
             'popupFormatter' => '',
-            'markerIcon'   => 'home',
-            'markerColour' => 'blue',
+
+            // See https://github.com/lvoogdt/Leaflet.awesome-markers#properties
+            // for documentation on what values can go in the two lines above (look at the icon and markerColor setting in the docs)
+            'markerIcon'      => 'home',
+            'markerColour'    => 'darkblue',
+            'markerFormatter' => '',
         );
     }
 
@@ -223,7 +227,7 @@ LINES;
             "$id.setOption('zoom', $zoom);\n" .
             $options['init'] . "\n" .
             "$id.init('$id', $lat, $lng, '$provider');\n" .
-            "var marker_icon = L.AwesomeMarkers.icon({ icon: '{$options['markerIcon']}', prefix: 'fa', markerColor: '{$options['markerColour']}' });\n";
+            "var default_marker_icon = L.AwesomeMarkers.icon({ icon: '{$options['markerIcon']}', prefix: 'fa', markerColor: '{$options['markerColour']}' });\n";
 
         foreach($pageArray as $page) {
             $marker = $page->get($fieldName);
@@ -235,7 +239,11 @@ LINES;
             if (isset($options['popupFormatter']) && is_callable($options['popupFormatter'])) {
                 $popup = call_user_func($options['popupFormatter'], $page);
             }
-            $inlineScript .= "$id.addMarkerIcon(marker_icon, $marker->lat, $marker->lng, '$url', '$title', '$popup');\n";
+            $marker_icon = 'default_marker_icon';
+            if (isset($options['markerFormatter']) && is_callable($options['markerFormatter'])) {
+                $marker_icon = call_user_func($options['markerFormatter'], $page);
+            }
+            $inlineScript .= "$id.addMarkerIcon($marker_icon, $marker->lat, $marker->lng, '$url', '$title', '$popup');\n";
         }
 
         if(count($pageArray) > 1) {
