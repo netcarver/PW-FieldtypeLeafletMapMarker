@@ -146,9 +146,10 @@ class MarkupLeafletMap extends WireData implements Module {
 
             // See https://github.com/lvoogdt/Leaflet.awesome-markers#properties
             // for documentation on what values can go in the two lines above (look at the icon and markerColor setting in the docs)
-            'markerIcon'      => 'home',
-            'markerColour'    => 'darkblue',
-            'markerFormatter' => '',
+            'markerIcon'       => 'home',
+            'markerColour'     => 'darkblue',
+            'markerIconColour' => 'white',
+            'markerFormatter'  => '',
         );
     }
 
@@ -227,7 +228,7 @@ LINES;
             "$id.setOption('zoom', $zoom);\n" .
             $options['init'] . "\n" .
             "$id.init('$id', $lat, $lng, '$provider');\n" .
-            "var default_marker_icon = L.AwesomeMarkers.icon({ icon: '{$options['markerIcon']}', prefix: 'fa', markerColor: '{$options['markerColour']}' });\n";
+            "var default_marker_icon = L.AwesomeMarkers.icon({ icon: '{$options['markerIcon']}', iconColor: '{$options['markerIconColour']}', prefix: 'fa', markerColor: '{$options['markerColour']}' });\n";
 
         foreach($pageArray as $page) {
             $marker = $page->get($fieldName);
