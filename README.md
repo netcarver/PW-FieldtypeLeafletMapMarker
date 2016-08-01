@@ -112,11 +112,11 @@ Option | Notes
 `markerLinkField` | Page field to use for the marker link, or blank to not link (type: string; default: url)
 `markerTitleField` | Page field to use for the marker title, or blank not to use a marker title (type: string; default: title)
 `fitToMarkers` | When multiple markers are present, set map to automatically adjust to fit to the given markers (type: boolean; default: true)
-`popupFormatter` | A PHP callback function for generating additional content of a marker's popup box
+`popupFormatter` | A PHP callback function, taking a `$page` as an argument, for generating additional content of a marker's popup box
 `markerIcon` | The default name of the FontAwesome icon to use in the marker - without the prefix 'fa-'. (type: string; default: 'home')
 `markerIconColour` | The default colour the of the FontAwesome icon (type: string; default 'white')
 `markerColour` | The default colour of the marker body that surrounds the icon. (type: string; default 'darkblue'.) See Leaflet.AwesomeMarker's [markerColor](https://github.com/lvoogdt/Leaflet.awesome-markers#properties) entry for the available colours - they are limited.
-`markerFormatter` | A PHP callback function for customising the look of a marker on the map. This is called once for each marker being placed on the map and allows the defaults to be overridden for each marker.
+`markerFormatter` | A PHP callback function, taking a `$page` as an argument, for customising the look of any marker on the map. This is called once for each marker being placed on the map and allows the defaults to be overridden for each marker.
 
 ----------
 
@@ -139,10 +139,28 @@ echo $map->render($items, 'YOUR MARKER FIELD', $options);
 
 ### Changing Per-Marker Appearance
 
-As part of the options array, you can specify two callback functions. The first can customise the visual look of the marker -
-including its colour and icon. The second allows you to add additional content to the popup that appears when a map
-marker is clicked.
+As part of the options array, you can specify a callback that can override the values used to generate each marker's
+appearance. The callback function takes a PW $page as an argument and can use any fields on the page to customise the
+visuals for the marker generated for that page.
 
+If you are using a PHP5.4 or above, anonymous functions make this very easy. If you are stuck with an older version of
+PHP, you can use a named function or method.
+
+To support this, let's add a new field called 'marker_icon', of type text, to the template of the pages that hold the LeafletMapMarker
+field.
+
+```
+<?php
+$options = array(
+    'markerFormatter' => function($page) {
+        // TODO provide example
+    }
+);
+echo $map->render($items, 'YOUR MARKER FIELD', $options);
+?>
+```
+
+In this way, you can let the pages holding your LeafletMarkers also define their visuals.
 
 ---------
 
