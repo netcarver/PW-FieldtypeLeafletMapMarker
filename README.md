@@ -160,6 +160,7 @@ $options = array(
 echo $map->render($items, 'YOUR MARKER FIELD', $options);
 ?>
 ```
+`$marker_options` is the array of [Leaflet.AwesomeMarker properties](https://github.com/lvoogdt/Leaflet.awesome-markers#properties) that will be used to generate this marker.
 
 In this way, you can let the pages holding your LeafletMarkers also define their visuals.
 
