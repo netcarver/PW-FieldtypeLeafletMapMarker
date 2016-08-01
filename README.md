@@ -7,6 +7,10 @@ editing uses Per Liedmans [leaflet-control-geocoder] (https://github.com/perlied
 
 This Fieldtype for ProcessWire holds an address or location name, and automatically geocodes the address to latitude/longitude using leaflet-control-geocoder. The resulting values may be used to populate any kind of map (whether Leaflet Maps or another).
 
+Support for per-marker customisation of visuals and popup content is included.
+
+![Screenshot of map with customised markers and popup text](/images/005.png)
+
 ----------
 
 ## Installation
