@@ -187,6 +187,8 @@ echo $map->render($items, 'YOUR MARKER FIELD', $options);
 ?>
 ```
 
+_NB._ The example above uses a PW image field called 'image' that is configured as a single instance field.
+
 ---------
 
 ### Contributors
