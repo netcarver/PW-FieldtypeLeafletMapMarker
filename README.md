@@ -162,6 +162,21 @@ echo $map->render($items, 'YOUR MARKER FIELD', $options);
 
 In this way, you can let the pages holding your LeafletMarkers also define their visuals.
 
+### Customising Popup Content
+
+You can similarly use a callback method to customise the content that appears within a marker's popup box.
+
+```
+<?php
+$options = array(
+    'popupFormatter' => function($page) {
+        return "<strong>Contact: $page->phone_number</strong>";
+    }
+);
+echo $map->render($items, 'YOUR MARKER FIELD', $options);
+?>
+```
+
 ---------
 
 ### Contributors
