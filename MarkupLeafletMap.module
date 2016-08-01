@@ -242,7 +242,20 @@ LINES;
             }
             $marker_icon = 'default_marker_icon';
             if (isset($options['markerFormatter']) && is_callable($options['markerFormatter'])) {
-                $marker_icon = call_user_func($options['markerFormatter'], $page);
+                $marker_options = array(
+                    'prefix'      => 'fa',
+                    'icon'        => $options['markerIcon'],
+                    'markerColor' => $options['markerColour'],
+                    'iconColor'   => $options['markerIconColour'],
+                );
+                $marker_options = call_user_func($options['markerFormatter'], $page, $marker_options);
+                $obj = array();
+                foreach ($marker_options as $k => $v) {
+                    $obj[] = "$k: '$v'";
+                }
+                $marker_options = implode(', ', $obj);
+                $marker_icon = 'L.AwesomeMarkers.icon({'.$marker_options.'})';
+
             }
             $inlineScript .= "$id.addMarkerIcon($marker_icon, $marker->lat, $marker->lng, '$url', '$title', '$popup');\n";
         }
