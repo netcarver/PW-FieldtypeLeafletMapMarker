@@ -236,10 +236,12 @@ LINES;
             if(!$marker->lat) continue;
             $url   = $options['markerLinkField']  ? $page->get($options['markerLinkField'])  : '';
             $title = $options['markerTitleField'] ? $page->get($options['markerTitleField']) : '';
+
             $popup = '';
             if (isset($options['popupFormatter']) && is_callable($options['popupFormatter'])) {
-                $popup = call_user_func($options['popupFormatter'], $page);
+                $popup = str_replace("'", "\\'", call_user_func($options['popupFormatter'], $page));
             }
+
             $marker_icon = 'default_marker_icon';
             if (isset($options['markerFormatter']) && is_callable($options['markerFormatter'])) {
                 $marker_options = array(
@@ -257,6 +259,7 @@ LINES;
                 $marker_icon = 'L.AwesomeMarkers.icon({'.$marker_options.'})';
 
             }
+
             $inlineScript .= "$id.addMarkerIcon($marker_icon, $marker->lat, $marker->lng, '$url', '$title', '$popup');\n";
         }
 
