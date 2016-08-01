@@ -116,7 +116,7 @@ Option | Notes
 `markerIcon` | The default name of the FontAwesome icon to use in the marker - without the prefix 'fa-'. (type: string; default: 'home')
 `markerIconColour` | The default colour the of the FontAwesome icon (type: string; default 'white')
 `markerColour` | The default colour of the marker body that surrounds the icon. (type: string; default 'darkblue'.) See Leaflet.AwesomeMarker's [markerColor](https://github.com/lvoogdt/Leaflet.awesome-markers#properties) entry for the available colours - they are limited.
-`markerFormatter` | A PHP callback function, taking a `$page` as an argument, for customising the look of any marker on the map. This is called once for each marker being placed on the map and allows the defaults to be overridden for each marker.
+`markerFormatter` | A PHP callback function (taking a PW `$page` and AwesomeMarker `$marker_options` as arguments) for customising the look of any marker on the map. This is called once for each marker being placed on the map and allows the defaults to be overridden for each marker.
 
 ----------
 
@@ -140,8 +140,8 @@ echo $map->render($items, 'YOUR MARKER FIELD', $options);
 ### Changing Per-Marker Appearance
 
 As part of the options array, you can specify a callback that can override the values used to generate each marker's
-appearance. The callback function takes a PW $page as an argument and can use any fields on the page to customise the
-visuals for the marker generated for that page.
+appearance. The callback function takes a PW `$page` and some `$marker_options` as arguments and can use any fields from
+the page to customise the visuals for the marker generated for that page.
 
 If you are using a PHP5.4 or above, anonymous functions make this very easy. If you are stuck with an older version of
 PHP, you can use a named function or method.
@@ -152,8 +152,9 @@ field.
 ```
 <?php
 $options = array(
-    'markerFormatter' => function($page) {
-        // TODO provide example
+    'markerFormatter' => function($page, $marker_options) {
+        $marker_options['icon'] = $page->marker_icon; // Override the default icon for this marker.
+        return $marker_options;
     }
 );
 echo $map->render($items, 'YOUR MARKER FIELD', $options);
