@@ -109,15 +109,14 @@ Option | Notes
 `lng` | Map center longitude (type: string/float; default: from your field settings)
 `useStyles` | Whether to populate inline styles to the map div for width/height (type: boolean; default: true). Set to false only if you will style the map div yourself
 `useMarkerSettings` | Makes single-marker map use marker settings rather than map settings (type: boolean; default: true)
-`markerLinkField`   | Page field to use for the marker link, or blank to not link (type: string; default: url)
-`markerTitleField`  | Page field to use for the marker title, or blank not to use a marker title (type: string; default: title)
-`fitToMarkers`      | When multiple markers are present, set map to automatically adjust to fit to the given markers (type: boolean; default: true)
-`popupFormatter`    | A PHP callback function for generating additional content of a marker's popup box
-`markerIcon`        | The default name of the FontAwesome icon to use in the marker - without the prefix 'fa-'. (type: string; default: 'home')
-`markerIconColour`  | The default colour the of the FontAwesome icon (type: string; default 'white')
-`markerColour`      | The default colour of the marker body that surrounds the icon. (type: string; default 'darkblue'.) See https://github.com/lvoogdt/Leaflet.awesome-markers#properties for the available colours - they are limited.
-`markerFormatter`   | A PHP callback function for customising the look of a marker on the map. This is called once for
-each marker being placed on the map and allows the defaults to be overridden for each marker.
+`markerLinkField` | Page field to use for the marker link, or blank to not link (type: string; default: url)
+`markerTitleField` | Page field to use for the marker title, or blank not to use a marker title (type: string; default: title)
+`fitToMarkers` | When multiple markers are present, set map to automatically adjust to fit to the given markers (type: boolean; default: true)
+`popupFormatter` | A PHP callback function for generating additional content of a marker's popup box
+`markerIcon` | The default name of the FontAwesome icon to use in the marker - without the prefix 'fa-'. (type: string; default: 'home')
+`markerIconColour` | The default colour the of the FontAwesome icon (type: string; default 'white')
+`markerColour` | The default colour of the marker body that surrounds the icon. (type: string; default 'darkblue'.) See Leaflet.AwesomeMarker's [markerColor](https://github.com/lvoogdt/Leaflet.awesome-markers#properties) entry for the available colours - they are limited.
+`markerFormatter` | A PHP callback function for customising the look of a marker on the map. This is called once for each marker being placed on the map and allows the defaults to be overridden for each marker.
 
 ----------
 
@@ -125,6 +124,20 @@ each marker being placed on the map and allows the defaults to be overridden for
 
 [Leaflet.AwesomeMarkers](https://github.com/lvoogdt/Leaflet.awesome-markers) and [FontAwesome](http://http://fontawesome.io/) are included in the module's assets and allow you to customise the look
 of your markers very nicely.
+
+### Changing the Default Marker Appearance
+
+You can change the default appearance of your map markers by supplying values for any or all of the `markerIcon`,
+`markerIconColour` and `markerColour` options that you pass into the `$map->render()` method. For instance, to make all
+the markers Red, with a white flag icon, use this code...
+```
+<?php
+$options = array('markerIcon' => 'flag', 'markerColour' => 'red');
+echo $map->render($items, 'YOUR MARKER FIELD', $options);
+?>
+```
+
+### Changing Per-Marker Appearance
 
 As part of the options array, you can specify two callback functions. The first can customise the visual look of the marker -
 including its colour and icon. The second allows you to add additional content to the popup that appears when a map
