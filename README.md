@@ -99,7 +99,7 @@ echo $map->render($items, 'YOUR MARKER FIELD', array('height' => '500px'));
 Consult the following table for more options for customising your Leaflet map.
 
 Option | Notes
---------------
+------ | -----
 `width` | Width of the map (type: string; default: 100%).
 `height` | Height of the map (type: string; default: 300px)
 `zoom` | Zoom level 1-25 (type: integer; default: from your field settings)
