@@ -10,12 +10,13 @@ class MarkupAddInlineScript extends WireData implements Module {
      */
     public static function getModuleInfo() {
         return array(
-            'title' => 'MarkupAddInlineScript',
-            'version' => 1,
-            'summary' => 'adds inline script before </body>',
+            'title'    => 'Inline Scripts',
+            'version'  => 2,
+            'summary'  => 'adds inline script before </body>',
             'singular' => true,
             'autoload' => true,
-            'requires' => 'MarkupLeafletMap'
+            'requires' => 'MarkupLeafletMap',
+            'Author'   => 'gebeer',
         );
     }
 
