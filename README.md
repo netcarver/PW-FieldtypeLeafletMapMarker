@@ -8,25 +8,22 @@ editing uses Per Liedmans [leaflet-control-geocoder] (https://github.com/perlied
 This Fieldtype for ProcessWire holds an address or location name, and automatically geocodes the address to latitude/longitude using leaflet-control-geocoder. The resulting values may be used to populate any kind of map (whether Leaflet Maps or another).
 
 
-
-
-## Using Leaflet Map Marker
-
-### How to install
+## Installation
 
 1. Copy all of the files for this module into /site/modules/FieldtypeLeafletMapMarker/
 
-2. In your admin, go to the Modules screen and "check for new modules." Install the following modules...
+2. In your admin, go to the Modules screen and "check for new modules." Under the 'Fieldtype' section, install the 'Leaflet Map Marker' module (FieldtypeLeadletMapMarker)
 
-Under the 'Fieldtype' section,  the 'Leaflet Map Marker' module (FieldtypeLeadletMapMarker)
-Under the 'Inputfield' section, the 'Leaflet Map Marker' module (InputfieldLeafletMapMarker)
-Under the 'Markup' section, the 'Leaflet Map' module (MarkupLeafletMap) and the 'Inline Scripts' module (MarkupAddInlineScript)
+3. Under the 'Inputfield' section, install the 'Leaflet Map Marker' module (InputfieldLeafletMapMarker) if it is not
+   already installed.
 
-3. In your admin, go to Setup > Fields > Add New Field. Choose LeafletMapMarker as the type.
-   If you are not sure what to name your field, simply "map" is a good one! Once created,
-   configure the settings on the *input* tab.
+4. Under the 'Markup' section, install the 'Leaflet Map' module (MarkupLeafletMap) **and** the 'Inline Scripts' module (MarkupAddInlineScript)
 
-4. Add your new "map" field to one or more templates, as you would any other field.
+5. In your admin, go to Setup > Fields > Add New Field. Choose LeafletMapMarker as the type.
+   If you are not sure what to name your field, simply "map" is a good one! Once created, configure the settings on the *input* tab.
+
+6. Add your new "map" field to one or more templates, as you would any other field.
+
 
 ### How to use from the page editor
 
@@ -43,13 +40,14 @@ Under the 'Markup' section, the 'Leaflet Map' module (MarkupLeafletMap) and the 
    longitude and zoom fields manually if you like. Unchecking the box between address
    and latitude disables the geocoder.
 
+_If the geocoding does not work, please ensure that your browser is not blocking the execution of any scripts._
+
+
 ### How to use from the API, in your template files
 
-In your template files, you can utilize this data for your own Leaflet Maps (or anything 
-else that you might need latitude/longitude for).
+In your template files, you can utilize this data for your own Leaflet Maps (or anything else that you might need latitude/longitude for).
 
-Lets assume that your field is called 'map'. Here is how you would access the
-components of it from the API:
+Lets assume that your field is called 'map'. Here is how you would access the components of it from the API:
 ```````````
 echo $page->map->address;	// outputs the address you entered
 echo $page->map->lat; 		// outputs the latitude
