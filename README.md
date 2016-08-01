@@ -1,4 +1,4 @@
-# FieldtypeLeafletMapMarker Module for ProcessWire 
+# FieldtypeLeafletMapMarker Module for ProcessWire
 
 This is a port of the Map Marker Fieldtype by Ryan Cramer. Instead of Google maps it uses Leaflet maps.
 
@@ -7,6 +7,7 @@ editing uses Per Liedmans [leaflet-control-geocoder] (https://github.com/perlied
 
 This Fieldtype for ProcessWire holds an address or location name, and automatically geocodes the address to latitude/longitude using leaflet-control-geocoder. The resulting values may be used to populate any kind of map (whether Leaflet Maps or another).
 
+----------
 
 ## Installation
 
@@ -59,42 +60,37 @@ echo $page->map->zoom;		// outputs the zoom level
 
 ## Markup Leaflet Map
 
-This package also comes with a module called MarkupLeafletMap. It provides a simple means
-of outputting a Leaflet Map based on the data managed by FieldtypeLeafletMapMarker. To install,
-simply click "install" for the Leaflet Maps (Markup) module. This is a Markup module, 
-meaning it exists primarily to generate markup for output on the front-end of your site.
+This package also comes with a markup helper module called MarkupLeafletMap. It provides a simple means of outputting a Leaflet Map based on the data managed by FieldtypeLeafletMapMarker.
 
 ### How to use
 
-Add this somewhere before your closing `</head>` tag:
-`````````
- <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
- <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
- <link rel="stylesheet" type="text/css" href="<?php echo $config->urls->templates?>styles/MarkerCluster.css" />
- <link rel="stylesheet" type="text/css" href="<?php echo $config->urls->templates?>styles/MarkerCluster.Default.css" />
- <script type="text/javascript" src="<?php echo $config->urls->templates?>scripts/leaflet.markercluster.js"></script>
+Seeing as we are going to need access to the module as we generate the HTML header block (to add script and style
+includes), we first load and gain access to the Markup module...
+```
+<?php $map = wire('modules')->get('MarkupLeafletMap'); ?>
+```
 
+_Leaflet's js code requires jquery - so make sure you load that in HTML header section, the markup module will not do this for you._
 
+MarkupLeafletMap includes the _getLeafletMapHeaderLines()_ method that generates all the needed script and style includes for your HTML header
+section so simply add this somewhere before your closing `</head>` tag:
+```
+<?php echo $map->getLeafletMapHeaderLines(); ?>
+```
 
+In the location within the body of your HTML where you want your map to appear, place the following:
 `````````
-
-In the location where you want to output your map, place the following in your template file:
+<?php echo $map->render($page, 'YOUR MARKER FIELD'); ?>
 `````````
-$map = $modules->get('MarkupLeafletMap');
-echo $map->render($page, 'map');
-`````````
-In the above, $page is the Page object that has the 'map' field. Rreplace 'map' with the name of your FieldtypeMap field
 
 To render a map with multiple markers on it, specify a PageArray rather than a single $page:
 `````````
-$items = $pages->find("template=something, map!='', sort=title");
-$map = $modules->get('MarkupLeafletMap');
-echo $map->render($items, 'map');
+$items = $pages->find("A SELECTOR THAT GETS YOUR PAGES WITH MARKER FIELDS");
+echo $map->render($items, 'YOUR MARKER FIELD');
 `````````
 
 To specify options, provide a 3rd argument with an options array:
 `````````
-$map = $modules->get('MarkupLeafletMap');
 echo $map->render($items, 'map', array('height' => '500px'));
 `````````
 
