@@ -18,9 +18,9 @@ This Fieldtype for ProcessWire holds an address or location name, and automatica
 
 2. In your admin, go to the Modules screen and "check for new modules." Install the following modules...
 
-   Under the 'Fieldtype' section,  the 'Leaflet Map Marker' module (FieldtypeLeadletMapMarker)
-   Under the 'Inputfield' section, the 'Leaflet Map Marker' module (InputfieldLeafletMapMarker)
-   Under the 'Markup' section, the 'Leaflet Map' module (MarkupLeafletMap) and the 'Inline Scripts' module (MarkupAddInlineScript)
+Under the 'Fieldtype' section,  the 'Leaflet Map Marker' module (FieldtypeLeadletMapMarker)
+Under the 'Inputfield' section, the 'Leaflet Map Marker' module (InputfieldLeafletMapMarker)
+Under the 'Markup' section, the 'Leaflet Map' module (MarkupLeafletMap) and the 'Inline Scripts' module (MarkupAddInlineScript)
 
 3. In your admin, go to Setup > Fields > Add New Field. Choose LeafletMapMarker as the type.
    If you are not sure what to name your field, simply "map" is a good one! Once created,
