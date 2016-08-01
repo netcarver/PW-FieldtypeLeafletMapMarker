@@ -1,61 +1,52 @@
-# FieldtypeLeafletLeafletMapMarker Module for ProcessWire 
+# FieldtypeLeafletMapMarker Module for ProcessWire 
 
-This is a port of the Map Marker Fieldtype by Ryan Cramer. Instead of Google maps it 
-uses Leaflet maps. Google maps geocoding is still used for geocoding default lat/lng values under field settings.
+This is a port of the Map Marker Fieldtype by Ryan Cramer. Instead of Google maps it uses Leaflet maps.
 
-For geocoding on page editing the module uses Per Liedmans [leaflet-control-geocoder] (https://github.com/perliedman/leaflet-control-geocoder)
+Google maps geocoding is still used for geocoding default lat/lng values under *field* settings but the geocoding on page
+editing uses Per Liedmans [leaflet-control-geocoder] (https://github.com/perliedman/leaflet-control-geocoder)
 
-This Fieldtype for ProcessWire holds an address or location name, and automatically
-geocodes the address to latitude/longitude using leaflet-control-geocoder. The resulting 
-values may be used to populate any kind of map (whether Leaflet Maps or another). 
+This Fieldtype for ProcessWire holds an address or location name, and automatically geocodes the address to latitude/longitude using leaflet-control-geocoder. The resulting values may be used to populate any kind of map (whether Leaflet Maps or another).
 
-This Fieldtype was created to serve as an example of creating a custom Fieldtype and 
-Inputfield that contains multiple pieces of data. Though the Fieldtype has now gone
-far beyond that and is relatively full featured. As a result, it may no longer be
-the simplest example of how to implement a Fieldtype/Inputfield, though it is very
-effective and useful. 
 
-LeafletMapMarker also has a corresponding Inputfield and Markup module, named
-InputfieldLeafletMapMarker and MarkupLeafletMap. When you install FieldtypeLeafletMapMarker, the
-Inputfield will also be installed and used for input on the admin side. Installation
-of MarkupLeafletMap is optional. It provides a simple way to render Leaflet maps with
-the data managed by FieldtypeLeafletMapMarker. 
 
 
 ## Using Leaflet Map Marker
 
 ### How to install
 
-1. Copy all of the files for this module into /site/modules/FieldtypeLeafletLeafletMapMarker/
+1. Copy all of the files for this module into /site/modules/FieldtypeLeafletMapMarker/
 
-2. In your admin, go to the Modules screen and "check for new modules." Click *install*
-   for the Map Marker Fieldtype. 
+2. In your admin, go to the Modules screen and "check for new modules." Install the following modules...
+
+   Under the 'Fieldtype' section,  the 'Leaflet Map Marker' module (FieldtypeLeadletMapMarker)
+   Under the 'Inputfield' section, the 'Leaflet Map Marker' module (InputfieldLeafletMapMarker)
+   Under the 'Markup' section, the 'Leaflet Map' module (MarkupLeafletMap) and the 'Inline Scripts' module (MarkupAddInlineScript)
 
 3. In your admin, go to Setup > Fields > Add New Field. Choose LeafletMapMarker as the type.
    If you are not sure what to name your field, simply "map" is a good one! Once created,
-   configure the settings on the *input* tab. 
+   configure the settings on the *input* tab.
 
-4. Add your new "map" field to one or more templates, as you would any other field. 
+4. Add your new "map" field to one or more templates, as you would any other field.
 
 ### How to use from the page editor
 
-1. Create or edit a page using one of the templates you added the "map" field to. 
+1. Create or edit a page using one of the templates you added the "map" field to.
 
 2. Type in a location or address into the "address" box for the map field. Then click 
    outside of the address, and the Javascript geocoder should automatically populate the
    latitude, longitude and map location. The Leaflet geocoder will accept full addresses
    or known location names. For instance, you could type in "Disney Land" and it knows
-   how to find locations like that. 
+   how to find locations like that.
 
 3. The geocoding also works in reverse. You may drag the map marker wherever you want
    and it will populate the address field for you. You may also populate the latitude,
    longitude and zoom fields manually if you like. Unchecking the box between address
-   and latitude disables the geocoder. 
+   and latitude disables the geocoder.
 
-### How to use from the API, in your template files 
+### How to use from the API, in your template files
 
 In your template files, you can utilize this data for your own Leaflet Maps (or anything 
-else that you might need latitude/longitude for). 
+else that you might need latitude/longitude for).
 
 Lets assume that your field is called 'map'. Here is how you would access the
 components of it from the API:
@@ -91,65 +82,71 @@ Add this somewhere before your closing `</head>` tag:
 
 In the location where you want to output your map, place the following in your template file:
 `````````
-$map = $modules->get('MarkupLeafletMap'); 
-echo $map->render($page, 'map'); 
+$map = $modules->get('MarkupLeafletMap');
+echo $map->render($page, 'map');
 `````````
-In the above, $page is the Page object that has the 'map' field. Rreplace 'map' with the name of 
-your FieldtypeMap field
+In the above, $page is the Page object that has the 'map' field. Rreplace 'map' with the name of your FieldtypeMap field
 
-To render a map with multiple markers on it, specify a PageArray rather than a single $page: 
+To render a map with multiple markers on it, specify a PageArray rather than a single $page:
 `````````
-$items = $pages->find("template=something, map!='', sort=title"); 
-$map = $modules->get('MarkupLeafletMap'); 
-echo $map->render($items, 'map'); 
+$items = $pages->find("template=something, map!='', sort=title");
+$map = $modules->get('MarkupLeafletMap');
+echo $map->render($items, 'map');
 `````````
 
 To specify options, provide a 3rd argument with an options array:
 `````````
-$map = $modules->get('MarkupLeafletMap'); 
-echo $map->render($items, 'map', array('height' => '500px')); 
+$map = $modules->get('MarkupLeafletMap');
+echo $map->render($items, 'map', array('height' => '500px'));
 `````````
 
 ### Options
 
-Here is a list of all possible options (with defaults shown):  
+Here is a list of all possible options (with defaults shown)
 
-`width`    
+`width`
 Width of the map (type: string; default: 100%).
 
-`height`    
-Height of the map (type: string; default: 300px) 
+`height`
+Height of the map (type: string; default: 300px)
 
-`zoom`    
+`zoom`
 Zoom level 1-25 (type: integer; default: from your field settings)
 
-`id`   
+`id`
 Map ID attribute (type: string; default: mgmap)
 
-`class`   
+`class`
 Map class attribute (type: string; default: MarkupLeafletMap)
 
-`lat`   
-Map center latitude (type: string|float; default: from your field settings)  
+`lat`
+Map center latitude (type: string|float; default: from your field settings)
 
-`lng`   
+`lng`
 Map center longitude (type: string|float; default: from your field settings)
 
-`useStyles`   
+`useStyles`
 Whether to populate inline styles to the map div for width/height (type: boolean; default: true).
 Set to false only if you will style the map div yourself.
 
-`useMarkerSettings`   
+`useMarkerSettings`
 Makes single-marker map use marker settings rather than map settings (type: boolean; default: true).
 
-`markerLinkField`   
+`markerLinkField`
 Page field to use for the marker link, or blank to not link (type: string; default: url).
 
-`markerTitleField`    
-Page field to use for the marker title, or blank not to use a marker title (type: string; default: title). 
+`markerTitleField`
+Page field to use for the marker title, or blank not to use a marker title (type: string; default: title).
 
-`fitToMarkers`   
-When multiple markers are present, set map to automatically adjust to fit to the given markers (type: boolean; default: true). 
+`fitToMarkers`
+When multiple markers are present, set map to automatically adjust to fit to the given markers (type: boolean; default: true).
 
 ---------
 
+### Contributors
+
+* [Ryan Cramer](https://processwire.com/talk/profile/2-ryan/) provided the original Google Maps module.
+* [Mats](https://processwire.com/talk/profile/67-mats/) produces the original Leaflet version.
+* [gebeer](https://processwire.com/talk/profile/1920-gebeer/) extended Mats' work, adding the Inline Scripts module.
+* [netcarver](https://processwire.com/talk/profile/465-netcarver/) added callback formatters for marker and popover content generation. He also added AwesomeMarker
+  support.
