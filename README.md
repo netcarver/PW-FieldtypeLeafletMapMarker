@@ -165,15 +165,19 @@ In this way, you can let the pages holding your LeafletMarkers also define their
 
 ### Customising Popup Content
 
-You can similarly use a callback method to customise the content that appears within a marker's popup box.
+You can similarly use a callback method to customise the content that appears within a marker's popup box. The return
+value from this method should be an HTML snippet that will be placed into the popup box _by Javascript_.
 
 ```
 <?php
 $options = array(
     'popupFormatter' => function($page) {
-        return "<strong>Contact: $page->phone_number</strong>";
+        $out[] = "<strong>Contact: $page->phone_number</strong>";
+        $out[] = "<img src=\"{$page->image->url}\" width=\"100\" height=\"100\" />"; // ** NB: Use escaped double quotes if HTML attributes needed **
+        return implode('<br/>', $out);
     }
 );
+
 echo $map->render($items, 'YOUR MARKER FIELD', $options);
 ?>
 ```
