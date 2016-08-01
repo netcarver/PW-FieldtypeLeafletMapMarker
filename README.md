@@ -100,22 +100,31 @@ Consult the following table for more options for customising your Leaflet map.
 
 Option | Notes
 ------ | -----
-`width` | Width of the map (type: string; default: 100%).
+`width` | Width of the map (type: string; default: 100%)
 `height` | Height of the map (type: string; default: 300px)
 `zoom` | Zoom level 1-25 (type: integer; default: from your field settings)
 `id` | Map ID attribute (type: string; default: mgmap)
 `class` | Map class attribute (type: string; default: MarkupLeafletMap)
-`lat` | Map center latitude (type: string|float; default: from your field settings)
-`lng` | Map center longitude (type: string|float; default: from your field settings)
-`useStyles` | Whether to populate inline styles to the map div for width/height (type: boolean; default: true). Set to false only if you will style the map div yourself.
-`useMarkerSettings` | Makes single-marker map use marker settings rather than map settings (type: boolean; default: true).
-`markerLinkField` | Page field to use for the marker link, or blank to not link (type: string; default: url).
-`markerTitleField` | Page field to use for the marker title, or blank not to use a marker title (type: string; default: title).
-`fitToMarkers` | When multiple markers are present, set map to automatically adjust to fit to the given markers (type: boolean; default: true).
+`lat` | Map center latitude (type: string/float; default: from your field settings)
+`lng` | Map center longitude (type: string/float; default: from your field settings)
+`useStyles` | Whether to populate inline styles to the map div for width/height (type: boolean; default: true). Set to false only if you will style the map div yourself
+`useMarkerSettings` | Makes single-marker map use marker settings rather than map settings (type: boolean; default: true)
+`markerLinkField`   | Page field to use for the marker link, or blank to not link (type: string; default: url)
+`markerTitleField`  | Page field to use for the marker title, or blank not to use a marker title (type: string; default: title)
+`fitToMarkers`      | When multiple markers are present, set map to automatically adjust to fit to the given markers (type: boolean; default: true)
+`popupFormatter`    | A PHP callback function for generating additional content of a marker's popup box
+`markerIcon`        | The default name of the FontAwesome icon to use in the marker - without the prefix 'fa-'. (type: string; default: 'home')
+`markerIconColour`  | The default colour the of the FontAwesome icon (type: string; default 'white')
+`markerColour`      | The default colour of the marker body that surrounds the icon. (type: string; default 'darkblue'.) See https://github.com/lvoogdt/Leaflet.awesome-markers#properties for the available colours - they are limited.
+`markerFormatter`   | A PHP callback function for customising the look of a marker on the map. This is called once for
+each marker being placed on the map and allows the defaults to be overridden for each marker.
 
 ----------
 
 ## Customising A Marker's Visuals and Popup Contents
+
+[Leaflet.AwesomeMarkers](https://github.com/lvoogdt/Leaflet.awesome-markers) and [FontAwesome](http://http://fontawesome.io/) are included in the module's assets and allow you to customise the look
+of your markers very nicely.
 
 As part of the options array, you can specify two callback functions. The first can customise the visual look of the marker -
 including its colour and icon. The second allows you to add additional content to the popup that appears when a map
