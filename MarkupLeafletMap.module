@@ -239,7 +239,9 @@ LINES;
 
             $popup = '';
             if (isset($options['popupFormatter']) && is_callable($options['popupFormatter'])) {
+                // Need to escape returned single quotes and turn newlines into HTML breaks as this is going into a JS string
                 $popup = str_replace("'", "\\'", call_user_func($options['popupFormatter'], $page));
+                $popup = str_replace("\n", '<br/>', $popup);
             }
 
             $marker_icon = 'default_marker_icon';
