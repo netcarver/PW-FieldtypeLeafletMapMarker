@@ -96,6 +96,8 @@ echo $map->render($items, 'YOUR MARKER FIELD', array('height' => '500px'));
 
 ### Options
 
+Consult the following table for more options for customising your Leaflet map.
+
 Option | Notes
 --------------
 `width` | Width of the map (type: string; default: 100%).
@@ -111,7 +113,9 @@ Option | Notes
 `markerTitleField` | Page field to use for the marker title, or blank not to use a marker title (type: string; default: title).
 `fitToMarkers` | When multiple markers are present, set map to automatically adjust to fit to the given markers (type: boolean; default: true).
 
-### Customising A Marker's Visuals and Popup Contents
+----------
+
+## Customising A Marker's Visuals and Popup Contents
 
 As part of the options array, you can specify two callback functions. The first can customise the visual look of the marker -
 including its colour and icon. The second allows you to add additional content to the popup that appears when a map
