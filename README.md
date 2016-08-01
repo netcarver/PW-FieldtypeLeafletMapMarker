@@ -30,7 +30,7 @@ This Fieldtype for ProcessWire holds an address or location name, and automatica
 
 1. Create or edit a page using one of the templates you added the "map" field to.
 
-2. Type in a location or address into the "address" box for the map field. Then click 
+2. Type in a location or address into the "address" box for the map field. Then click
    outside of the address, and the Javascript geocoder should automatically populate the
    latitude, longitude and map location. The Leaflet geocoder will accept full addresses
    or known location names. For instance, you could type in "Disney Land" and it knows
@@ -62,7 +62,7 @@ echo $page->map->zoom;		// outputs the zoom level
 
 This package also comes with a markup helper module called MarkupLeafletMap. It provides a simple means of outputting a Leaflet Map based on the data managed by FieldtypeLeafletMapMarker.
 
-### How to use
+### Basic Usage
 
 Seeing as we are going to need access to the module as we generate the HTML header block (to add script and style
 includes), we first load and gain access to the Markup module...
@@ -91,49 +91,32 @@ echo $map->render($items, 'YOUR MARKER FIELD');
 
 To specify options, provide a 3rd argument with an options array:
 `````````
-echo $map->render($items, 'map', array('height' => '500px'));
+echo $map->render($items, 'YOUR MARKER FIELD', array('height' => '500px'));
 `````````
 
 ### Options
 
-Here is a list of all possible options (with defaults shown)
+Option | Notes
+--------------
+`width` | Width of the map (type: string; default: 100%).
+`height` | Height of the map (type: string; default: 300px)
+`zoom` | Zoom level 1-25 (type: integer; default: from your field settings)
+`id` | Map ID attribute (type: string; default: mgmap)
+`class` | Map class attribute (type: string; default: MarkupLeafletMap)
+`lat` | Map center latitude (type: string|float; default: from your field settings)
+`lng` | Map center longitude (type: string|float; default: from your field settings)
+`useStyles` | Whether to populate inline styles to the map div for width/height (type: boolean; default: true). Set to false only if you will style the map div yourself.
+`useMarkerSettings` | Makes single-marker map use marker settings rather than map settings (type: boolean; default: true).
+`markerLinkField` | Page field to use for the marker link, or blank to not link (type: string; default: url).
+`markerTitleField` | Page field to use for the marker title, or blank not to use a marker title (type: string; default: title).
+`fitToMarkers` | When multiple markers are present, set map to automatically adjust to fit to the given markers (type: boolean; default: true).
 
-`width`
-Width of the map (type: string; default: 100%).
+### Customising A Marker's Visuals and Popup Contents
 
-`height`
-Height of the map (type: string; default: 300px)
+As part of the options array, you can specify two callback functions. The first can customise the visual look of the marker -
+including its colour and icon. The second allows you to add additional content to the popup that appears when a map
+marker is clicked.
 
-`zoom`
-Zoom level 1-25 (type: integer; default: from your field settings)
-
-`id`
-Map ID attribute (type: string; default: mgmap)
-
-`class`
-Map class attribute (type: string; default: MarkupLeafletMap)
-
-`lat`
-Map center latitude (type: string|float; default: from your field settings)
-
-`lng`
-Map center longitude (type: string|float; default: from your field settings)
-
-`useStyles`
-Whether to populate inline styles to the map div for width/height (type: boolean; default: true).
-Set to false only if you will style the map div yourself.
-
-`useMarkerSettings`
-Makes single-marker map use marker settings rather than map settings (type: boolean; default: true).
-
-`markerLinkField`
-Page field to use for the marker link, or blank to not link (type: string; default: url).
-
-`markerTitleField`
-Page field to use for the marker title, or blank not to use a marker title (type: string; default: title).
-
-`fitToMarkers`
-When multiple markers are present, set map to automatically adjust to fit to the given markers (type: boolean; default: true).
 
 ---------
 
