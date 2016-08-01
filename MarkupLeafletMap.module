@@ -88,7 +88,7 @@ class MarkupLeafletMap extends WireData implements Module {
     public static function getModuleInfo() {
         return array(
             'title' => 'LeafletMap Markup',
-            'version' => 101,
+            'version' => 110,
             'summary' => 'Renders Leaflet Maps for the LealetMapMarker Fieldtype',
             'requires' => 'FieldtypeLeafletMapMarker',
             'installs' => 'MarkupAddInlineScript',
