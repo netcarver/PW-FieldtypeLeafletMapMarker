@@ -161,7 +161,6 @@ class MarkupLeafletMap extends WireData implements Module {
         $url = $this->config->urls->siteModules. 'FieldtypeLeafletMapMarker/';
         $lines = '';
         if ($fontawesome) {
-
             $lines .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$url}assets/font-awesome-4.6.3/css/font-awesome.min.css\">";
         }
         $lines .= <<<LINES
